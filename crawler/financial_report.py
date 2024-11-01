@@ -2,10 +2,10 @@ import requests
 import pandas as pd
 import numpy as np
 
-def get_ba(year:int,q:int):#抓資產負債表
+def get_ba(year:int,quarter:int):#抓資產負債表
     url = 'https://mops.twse.com.tw/mops/web/ajax_t163sb05'
     year = year
-    season = q
+    season = quarter
     headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"}
     r = requests.post(url, {
             'encodeURIComponent':1,
@@ -25,10 +25,10 @@ def get_ba(year:int,q:int):#抓資產負債表
     other2 = dfs[6]
     return banks,securities,other,fin,insur,other2
 
-def get_income(year:int,q:int):#抓綜合損益表
+def get_income(year:int,quarter:int):#抓綜合損益表
     url = 'https://mops.twse.com.tw/mops/web/ajax_t163sb04'
     year = year
-    season = q
+    season = quarter
     r = requests.post(url, {
             'encodeURIComponent':1,
             'step':1,
@@ -67,5 +67,6 @@ def update_eps(year:int,quarter:int):#更新eps
     all_eps["year"] = year
     all_eps["quarter"] = quarter 
     all_eps = all_eps.reset_index(drop=True)
+
     from conn_postgre import insert_data
     insert_data("eps",all_eps)
